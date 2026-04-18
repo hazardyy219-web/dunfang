@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= description %>">
+    <meta name="keywords" content="<%= keywords %>">
+    <title><%= title %></title>
+    <link rel="icon" href="/images/logo1.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #b8a67a;
+            --primary-light: #d4c4a8;
+            --primary-dark: #9a8a66;
+            --accent: #c9b896;
+            --dark: #2d2d2d;
+            --gray-dark: #5a5a5a;
+            --gray: #8a8a8a;
+            --gray-light: #b8b8b8;
+            --bg-dark: #1a1a1a;
+            --bg-cream: #faf9f6;
+            --bg-warm: #f5f3ef;
+            --bg-light: #ffffff;
+            --border: #e8e6e1;
+            --shadow: rgba(0, 0, 0, 0.04);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--dark);
+            line-height: 1.7;
+            background-color: var(--bg-cream);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.5s ease;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: var(--gray-dark);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            padding: 0.75rem 0;
+            transition: color 0.4s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.4s ease, left 0.4s ease;
+        }
+        
+        .nav-link:hover { color: var(--primary); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link.active { color: var(--primary); }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2a2a2a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(184, 166, 122, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 70% 30%, rgba(201, 184, 150, 0.06) 0%, transparent 50%);
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .value-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 3rem 2.5rem;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .value-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+        }
+        
+        .value-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer {
+            background: var(--bg-dark);
+            color: var(--gray-light);
+        }
+        
+        .footer-link {
+            color: var(--gray-light);
+            transition: color 0.4s ease;
+        }
+        
+        .footer-link:hover { color: var(--primary-light); }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--bg-warm) 0%, var(--border) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+        
+        .image-placeholder i {
+            font-size: 3rem;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/navbar', {currentPage: 'about'}) %>
+
+    <main class="pt-24">
+        <section class="hero py-24 lg:py-32">
+            <div class="max-w-7xl mx-auto px-8 lg:px-12 relative z-10">
+                <div class="max-w-3xl">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-8 leading-tight" style="font-weight: 300; letter-spacing: -0.02em;">
+                        About Us
+                    </h1>
+                    <p class="text-xl text-gray-300 leading-relaxed" style="font-weight: 300;">
+                        Building excellence through innovation, quality, and dedication since 2003.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-32 bg-white">
+            <div class="max-w-7xl mx-auto px-8 lg:px-12">
+                <div class="grid lg:grid-cols-2 gap-20 items-center">
+                    <div class="reveal">
+                        <h2 class="text-3xl md:text-4xl font-light text-gray-900 mb-8" style="font-weight: 300; letter-spacing: -0.01em;">Our Story</h2>
+                        <p class="text-lg text-gray-600 mb-8 leading-relaxed" style="font-weight: 300;">
+                            Founded in 2003, Dunfang Precision Machinery has grown from a small workshop to a leading manufacturer of precision industrial components. Our commitment to quality and innovation has earned us the trust of clients worldwide.
+                        </p>
+                        <p class="text-lg text-gray-600 leading-relaxed" style="font-weight: 300;">
+                            We specialize in metal forming tools, plastic components, rubber products, and industrial automation solutions. Our state-of-the-art facilities and experienced team enable us to deliver products that meet the highest international standards.
+                        </p>
+                    </div>
+                    <div class="reveal">
+                        <div class="relative rounded-xl overflow-hidden shadow-2xl" style="border-radius: 8px;">
+                            <img src="https://picsum.photos/id/1048/800/600" alt="Factory" class="w-full object-cover" onerror="this.parentElement.innerHTML='<div class=\'image-placeholder h-96 rounded-xl\'><i class=\'fas fa-industry\'></i></div>'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-32" style="background: var(--bg-warm);">
+            <div class="max-w-7xl mx-auto px-8 lg:px-12">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-16">
+                    <div class="stat-item reveal" style="text-align: center;">
+                        <div class="stat-number">20+</div>
+                        <p class="text-gray-600 mt-2" style="font-weight: 400; font-size: 0.95rem;">Years Experience</p>
+                    </div>
+                    <div class="stat-item reveal" style="text-align: center; transition-delay: 0.15s;">
+                        <div class="stat-number">500+</div>
+                        <p class="text-gray-600 mt-2" style="font-weight: 400; font-size: 0.95rem;">Products</p>
+                    </div>
+                    <div class="stat-item reveal" style="text-align: center; transition-delay: 0.3s;">
+                        <div class="stat-number">50+</div>
+                        <p class="text-gray-600 mt-2" style="font-weight: 400; font-size: 0.95rem;">Countries</p>
+                    </div>
+                    <div class="stat-item reveal" style="text-align: center; transition-delay: 0.45s;">
+                        <div class="stat-number">200+</div>
+                        <p class="text-gray-600 mt-2" style="font-weight: 400; font-size: 0.95rem;">Employees</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-32 bg-white">
+            <div class="max-w-7xl mx-auto px-8 lg:px-12">
+                <div class="text-center max-w-3xl mx-auto mb-24 reveal">
+                    <h2 class="text-3xl md:text-4xl font-light text-gray-900 mb-6" style="font-weight: 300; letter-spacing: -0.01em;">Our Values</h2>
+                    <p class="text-lg text-gray-600" style="font-weight: 300;">The principles that guide everything we do.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-12">
+                    <div class="value-card reveal">
+                        <div class="value-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-gray-900 mb-4" style="font-weight: 500;">Quality First</h3>
+                        <p class="text-gray-600" style="font-weight: 300;">We never compromise on quality. Every product undergoes rigorous testing to ensure it meets our exacting standards.</p>
+                    </div>
+                    
+                    <div class="value-card reveal" style="transition-delay: 0.15s;">
+                        <div class="value-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-gray-900 mb-4" style="font-weight: 500;">Innovation</h3>
+                        <p class="text-gray-600" style="font-weight: 300;">Continuous improvement and innovation drive our development of new products and manufacturing processes.</p>
+                    </div>
+                    
+                    <div class="value-card reveal" style="transition-delay: 0.3s;">
+                        <div class="value-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-gray-900 mb-4" style="font-weight: 500;">Partnership</h3>
+                        <p class="text-gray-600" style="font-weight: 300;">We build long-term relationships with our clients based on trust, transparency, and mutual success.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            reveals.forEach(el => observer.observe(el));
+        }
+        
+        document.addEventListener('DOMContentLoaded', initScrollReveal);
+    </script>
+</body>
+</html>

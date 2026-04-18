@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= description %>">
+    <meta name="keywords" content="<%= keywords %>">
+    <title><%= title %></title>
+    <link rel="icon" href="/images/logo1.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #9c8b7a;
+            --primary-light: #d4c4b4;
+            --primary-dark: #7a6a5a;
+            --accent: #b8a898;
+            --dark: #2a2a2a;
+            --gray-dark: #5a5a5a;
+            --gray: #8a8a8a;
+            --gray-light: #b8b8b8;
+            --bg-dark: #1a1a1a;
+            --bg-cream: #faf9f7;
+            --bg-warm: #f5f3f0;
+            --bg-light: #ffffff;
+            --border: #e8e6e3;
+            --shadow: rgba(0, 0, 0, 0.03);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--dark);
+            line-height: 1.7;
+            background-color: var(--bg-cream);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* 滚动显示动画 - 简化版 */
+        .reveal {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+        }
+        
+        /* 导航栏 */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.5s ease;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: var(--gray-dark);
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            padding: 0.75rem 0;
+            transition: color 0.4s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.4s ease, left 0.4s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .nav-link.active {
+            color: var(--primary);
+        }
+        
+        /* Hero区域 */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #2a2a2a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(184, 166, 122, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 70% 30%, rgba(201, 184, 150, 0.06) 0%, transparent 50%);
+        }
+        
+        /* 产品卡片 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.25rem;
+        }
+        
+        .product-card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+            border-color: var(--primary-light);
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(156, 139, 122, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .product-card:hover::before {
+            opacity: 1;
+        }
+        
+        .product-image {
+            position: relative;
+            height: 160px;
+            background: var(--bg-warm);
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.03);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(156, 139, 122, 0.95);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(10px);
+            opacity: 0.8;
+        }
+        
+        .product-content {
+            padding: 1.25rem;
+        }
+        
+        .product-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+        
+        .product-card:hover .product-title {
+            color: var(--primary);
+        }
+        
+        .product-desc {
+            color: var(--gray);
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+        
+        .product-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .product-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .product-btn:hover {
+            gap: 0.75rem;
+            color: var(--primary-dark);
+        }
+        
+        .product-btn:hover::after {
+            width: 100%;
+        }
+        
+        /* 分类标签 */
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .category-tab {
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border);
+            background: var(--bg-light);
+            color: var(--gray-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(156, 139, 122, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .category-tab:hover::before {
+            left: 100%;
+        }
+        
+        .category-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(156, 139, 122, 0.1);
+        }
+        
+        .category-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(156, 139, 122, 0.3);
+        }
+        
+        .category-tab.active:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+        
+        .pagination-btn {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border);
+            background: var(--bg-light);
+            color: var(--gray-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pagination-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(156, 139, 122, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        
+        .pagination-btn:hover::before {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .pagination-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(156, 139, 122, 0.1);
+        }
+        
+        .pagination-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(156, 139, 122, 0.3);
+        }
+        
+        .pagination-btn.active:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* 页脚 */
+        .footer {
+            background: var(--bg-dark);
+            color: var(--gray-light);
+        }
+        
+        .footer-link {
+            color: var(--gray-light);
+            transition: color 0.4s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--primary-light);
+        }
+        
+        /* 图片加载占位 */
+        .image-placeholder {
+            background: linear-gradient(135deg, var(--bg-warm) 0%, var(--border) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+        
+        .image-placeholder i {
+            font-size: 3rem;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <%- include('partials/navbar', {currentPage: 'products'}) %>
+
+    <main class="pt-24">
+        <!-- Hero区域 -->
+        <section class="hero py-24 lg:py-32">
+            <div class="max-w-7xl mx-auto px-8 lg:px-12 relative z-10">
+                <div class="max-w-3xl">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-8 leading-tight" style="font-weight: 300; letter-spacing: -0.02em;">
+                        Our Products
+                    </h1>
+                    <p class="text-xl text-gray-300 leading-relaxed" style="font-weight: 300;">
+                        Discover our comprehensive range of precision machinery and industrial solutions, engineered for excellence.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 产品分类和列表 -->
+        <section class="py-24" style="background: var(--bg-warm);">
+            <div class="max-w-7xl mx-auto px-8 lg:px-12">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- 左侧分类栏 -->
+                    <div class="lg:w-1/4">
+                        <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-28">
+                            <h3 class="text-lg font-semibold mb-6 text-gray-900">Product Categories</h3>
+                            <div class="category-sidebar">
+                                <!-- 金属制品 -->
+                                <div class="category-item mb-4">
+                                    <button class="category-toggle flex items-center justify-between w-full text-left py-3 px-4 rounded hover:bg-gray-50 transition-colors" data-category="metal">
+                                        <span class="font-medium">Metal Products</span>
+                                        <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                    </button>
+                                    <div class="subcategories pl-4 mt-2 hidden">
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="metal-forming">Metal Forming Tools</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="metal-stamping">Metal Stamping Dies</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 塑料制品 -->
+                                <div class="category-item mb-4">
+                                    <button class="category-toggle flex items-center justify-between w-full text-left py-3 px-4 rounded hover:bg-gray-50 transition-colors" data-category="plastic">
+                                        <span class="font-medium">Plastic Products</span>
+                                        <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                    </button>
+                                    <div class="subcategories pl-4 mt-2 hidden">
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="plastic-components">Plastic Components</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="plastic-containers">Plastic Containers</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 橡胶制品 -->
+                                <div class="category-item mb-4">
+                                    <button class="category-toggle flex items-center justify-between w-full text-left py-3 px-4 rounded hover:bg-gray-50 transition-colors" data-category="rubber">
+                                        <span class="font-medium">Rubber Products</span>
+                                        <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                    </button>
+                                    <div class="subcategories pl-4 mt-2 hidden">
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="rubber-seals">Rubber Seals</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="rubber-gaskets">Rubber Gaskets</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="rubber-o-rings">Rubber O-Rings</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 建筑节能 -->
+                                <div class="category-item mb-4">
+                                    <button class="category-toggle flex items-center justify-between w-full text-left py-3 px-4 rounded hover:bg-gray-50 transition-colors" data-category="building">
+                                        <span class="font-medium">Building Energy</span>
+                                        <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                    </button>
+                                    <div class="subcategories pl-4 mt-2 hidden">
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="energy-windows">Energy Saving Windows</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 模具工装 -->
+                                <div class="category-item mb-4">
+                                    <button class="category-toggle flex items-center justify-between w-full text-left py-3 px-4 rounded hover:bg-gray-50 transition-colors" data-category="mold">
+                                        <span class="font-medium">Mold & Tooling</span>
+                                        <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                    </button>
+                                    <div class="subcategories pl-4 mt-2 hidden">
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="injection-molds">Injection Molds</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="automotive-molds">Automotive Molds</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="electronic-molds">Electronic Component Molds</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 五金配件 -->
+                                <div class="category-item mb-4">
+                                    <button class="category-toggle flex items-center justify-between w-full text-left py-3 px-4 rounded hover:bg-gray-50 transition-colors" data-category="hardware">
+                                        <span class="font-medium">Hardware Accessories</span>
+                                        <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                    </button>
+                                    <div class="subcategories pl-4 mt-2 hidden">
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="fasteners">Fasteners</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="handles-knobs">Handles & Knobs</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="hinges">Hinges</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="springs">Springs</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 机电产品 -->
+                                <div class="category-item mb-4">
+                                    <button class="category-toggle flex items-center justify-between w-full text-left py-3 px-4 rounded hover:bg-gray-50 transition-colors" data-category="mechanical">
+                                        <span class="font-medium">Mechanical & Electrical</span>
+                                        <i class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                                    </button>
+                                    <div class="subcategories pl-4 mt-2 hidden">
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="electrical-panels">Electrical Control Panels</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="industrial-motors">Industrial Motors</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="hydraulic-components">Hydraulic Components</button>
+                                        <button class="subcategory-item block w-full text-left py-2 px-4 hover:bg-gray-50 rounded text-sm text-gray-600" data-subcategory="automation-systems">Automation Control Systems</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 全部产品 -->
+                                <div class="category-item">
+                                    <button class="category-toggle flex items-center justify-between w-full text-left py-3 px-4 rounded hover:bg-gray-50 transition-colors" data-category="all">
+                                        <span class="font-medium">All Products</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧产品展示区 -->
+                    <div class="lg:w-3/4">
+                        <!-- 移动端分类标签栏 -->
+                        <div class="lg:hidden mb-8">
+                            <div class="category-tabs reveal overflow-x-auto pb-4">
+                                <button class="category-tab active" data-category="all">All</button>
+                                <button class="category-tab" data-category="metal">Metal</button>
+                                <button class="category-tab" data-category="plastic">Plastic</button>
+                                <button class="category-tab" data-category="rubber">Rubber</button>
+                                <button class="category-tab" data-category="building">Building</button>
+                                <button class="category-tab" data-category="mold">Mold</button>
+                                <button class="category-tab" data-category="hardware">Hardware</button>
+                                <button class="category-tab" data-category="mechanical">Electrical</button>
+                            </div>
+                        </div>
+                        
+                        <div id="products-container" class="product-grid">
+                            <!-- 产品将通过JavaScript动态加载 -->
+                        </div>
+
+                        <!-- 分页 -->
+                        <div id="pagination-container" class="mt-20 reveal">
+                            <!-- 分页按钮将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <%- include('partials/footer') %>
+
+    <script>
+        // 产品数据 - 包含所有图片
+        const products = [
+            // 金属制品
+            {
+                id: 1,
+                name: "Flashing Forming Tool",
+                description: "High-precision metal forming tool for creating metal flashing components with exceptional accuracy.",
+                image: "/images/metal-images/Flashing Forming Tool.jpg",
+                link: "/product-metal-flashing-forming-tool",
+                category: "metal",
+                subcategory: "metal-forming"
+            },
+            {
+                id: 2,
+                name: "Precision Forming Tool",
+                description: "Professional metal forming tool for complex geometric shapes with high precision.",
+                image: "/images/metal-images/Forming Tool(Flashing).jpg",
+                link: "/product-metal-precision-forming-tool",
+                category: "metal",
+                subcategory: "metal-forming"
+            },
+            {
+                id: 3,
+                name: "Metal Stamping Die",
+                description: "Advanced stamping die for metal sheet processing with high durability and precision.",
+                image: "/images/metal-images/2016-01-28 171115.jpg",
+                link: "/product-metal-stamping-die",
+                category: "metal",
+                subcategory: "metal-stamping"
+            },
+            
+            // 塑料制品
+            {
+                id: 4,
+                name: "Plastic Component",
+                description: "High-quality plastic injection molded parts with excellent surface finish.",
+                image: "/images/plastic-images/plastic1.png",
+                link: "/product-plastic-component",
+                category: "plastic",
+                subcategory: "plastic-components"
+            },
+            {
+                id: 5,
+                name: "Plastic Container",
+                description: "Durable plastic container with secure lid for storage and organization.",
+                image: "/images/plastic-images/plastic2.png",
+                link: "/product-plastic-container",
+                category: "plastic",
+                subcategory: "plastic-containers"
+            },
+            {
+                id: 6,
+                name: "Plastic Storage Box",
+                description: "Stackable plastic storage box with interlocking design for efficient organization.",
+                image: "/images/plastic-images/plastic3.png",
+                link: "/product-plastic-storage-box",
+                category: "plastic",
+                subcategory: "plastic-containers"
+            },
+            {
+                id: 7,
+                name: "Plastic Parts",
+                description: "Precision plastic parts for electronic and mechanical devices.",
+                image: "/images/plastic-images/plastic4.png",
+                link: "/product-plastic-parts",
+                category: "plastic",
+                subcategory: "plastic-components"
+            },
+            
+            // 橡胶制品
+            {
+                id: 8,
+                name: "Rubber Seal",
+                description: "Custom rubber seals and gaskets for industrial sealing applications.",
+                image: "/images/rubber-images/rubber1.jpg",
+                link: "/product-rubber-seal",
+                category: "rubber",
+                subcategory: "rubber-seals"
+            },
+            {
+                id: 9,
+                name: "Rubber Gasket",
+                description: "High-quality rubber gaskets for various sealing applications.",
+                image: "/images/rubber-images/rubber2.jpg",
+                link: "/product-rubber-gasket",
+                category: "rubber",
+                subcategory: "rubber-gaskets"
+            },
+            {
+                id: 10,
+                name: "Rubber O-Ring",
+                description: "Standard and custom O-rings for sealing applications.",
+                image: "/images/rubber-images/rubber3.jpg",
+                link: "/product-rubber-o-ring",
+                category: "rubber",
+                subcategory: "rubber-o-rings"
+            },
+            
+            // 建筑节能
+            {
+                id: 11,
+                name: "Energy Saving Window",
+                description: "High-performance energy-saving window system with excellent thermal insulation properties.",
+                image: "/images/buildingenergysaving-images/slight.jpg",
+                link: "/product-building-energy-saving-window",
+                category: "building",
+                subcategory: "energy-windows"
+            },
+            
+            // 模具工装
+            {
+                id: 12,
+                name: "Denso Duct Grill Mold",
+                description: "High-precision mold for manufacturing Denso duct grill components.",
+                image: "/images/moldtooling-images/Denso Duct Grill.jpg",
+                link: "/product-denso-duct-grill-mold",
+                category: "mold",
+                subcategory: "injection-molds"
+            },
+            {
+                id: 13,
+                name: "Ford Under Engine Tray Mold",
+                description: "Specialized mold for producing Ford under engine tray components.",
+                image: "/images/moldtooling-images/Ford Under Engine Tray.jpg",
+                link: "/product-ford-under-engine-tray-mold",
+                category: "mold",
+                subcategory: "automotive-molds"
+            },
+            {
+                id: 14,
+                name: "Hella Motor Carrier Mold",
+                description: "Precision mold for manufacturing Hella motor carrier components.",
+                image: "/images/moldtooling-images/Hella Motor Carrier.jpg",
+                link: "/product-hella-motor-carrier-mold",
+                category: "mold",
+                subcategory: "automotive-molds"
+            },
+            {
+                id: 15,
+                name: "Automotive Interior Mold",
+                description: "Complex mold for automotive interior components.",
+                image: "/images/moldtooling-images/IMG-20130101-01029.jpg",
+                link: "/product-automotive-interior-mold",
+                category: "mold",
+                subcategory: "automotive-molds"
+            },
+            {
+                id: 16,
+                name: "Precision Electronic Mold",
+                description: "High-precision mold for electronic components.",
+                image: "/images/moldtooling-images/IMG-20130122-01079.jpg",
+                link: "/product-precision-electronic-mold",
+                category: "mold",
+                subcategory: "electronic-molds"
+            },
+            {
+                id: 17,
+                name: "Rear View Mirror Mold",
+                description: "Specialized mold for manufacturing rear view mirror components.",
+                image: "/images/moldtooling-images/Rear View Mirror.jpg",
+                link: "/product-rear-view-mirror-mold",
+                category: "mold",
+                subcategory: "automotive-molds"
+            },
+            
+            // 五金配件
+            {
+                id: 18,
+                name: "Fasteners",
+                description: "High-quality fasteners for industrial applications.",
+                image: "/images/hardwareaccessories-images/hard1.png",
+                link: "/product-hardware-fasteners",
+                category: "hardware",
+                subcategory: "fasteners"
+            },
+            {
+                id: 19,
+                name: "Handles and Knobs",
+                description: "Ergonomic handles and knobs for industrial equipment.",
+                image: "/images/hardwareaccessories-images/hard2.png",
+                link: "/product-hardware-handles-knobs",
+                category: "hardware",
+                subcategory: "handles-knobs"
+            },
+            {
+                id: 20,
+                name: "Hinges",
+                description: "High-quality hinges for doors, cabinets, and machinery.",
+                image: "/images/hardwareaccessories-images/hard3.png",
+                link: "/product-hardware-hinges",
+                category: "hardware",
+                subcategory: "hinges"
+            },
+            {
+                id: 21,
+                name: "Springs",
+                description: "Precision springs for various mechanical applications.",
+                image: "/images/hardwareaccessories-images/hard4.png",
+                link: "/product-hardware-springs",
+                category: "hardware",
+                subcategory: "springs"
+            },
+            
+            // 机电产品
+            {
+                id: 22,
+                name: "Electrical Control Panel",
+                description: "Advanced industrial automation electrical control panel.",
+                image: "/images/mechanicalelectrical-images/1.jpg",
+                link: "/product-mechanical-electrical-control-panel",
+                category: "mechanical",
+                subcategory: "electrical-panels"
+            },
+            {
+                id: 23,
+                name: "Industrial Motor",
+                description: "High-quality industrial motor for heavy-duty applications.",
+                image: "/images/mechanicalelectrical-images/2.jpg",
+                link: "/product-mechanical-electrical-motor",
+                category: "mechanical",
+                subcategory: "industrial-motors"
+            },
+            {
+                id: 24,
+                name: "Hydraulic Components",
+                description: "High-performance hydraulic system components for industrial machinery.",
+                image: "/images/mechanicalelectrical-images/3.jpg",
+                link: "/product-mechanical-electrical-hydraulic-components",
+                category: "mechanical",
+                subcategory: "hydraulic-components"
+            },
+            {
+                id: 25,
+                name: "Automation Control System",
+                description: "Advanced automation control system for industrial processes.",
+                image: "/images/mechanicalelectrical-images/4.jpg",
+                link: "/product-mechanical-electrical-automation-control",
+                category: "mechanical",
+                subcategory: "automation-systems"
+            }
+        ];
+
+        let currentPage = 1;
+        let currentCategory = 'all';
+        let currentSubcategory = 'all';
+        const productsPerPage = 6;
+
+        // 获取过滤后的产品
+        function getFilteredProducts() {
+            if (currentCategory === 'all') {
+                return products;
+            }
+            
+            let filtered = products.filter(product => product.category === currentCategory);
+            
+            if (currentSubcategory !== 'all') {
+                filtered = filtered.filter(product => product.subcategory === currentSubcategory);
+            }
+            
+            return filtered;
+        }
+
+        // 渲染产品
+        function renderProducts(page) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+            
+            const filteredProducts = getFilteredProducts();
+            const start = (page - 1) * productsPerPage;
+            const end = start + productsPerPage;
+            const pageProducts = filteredProducts.slice(start, end);
+            
+            // 使用文档片段减少DOM操作
+            const fragment = document.createDocumentFragment();
+            
+            pageProducts.forEach((product, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card reveal';
+                card.style.transitionDelay = `${index * 0.15}s`;
+                
+                // 添加点击事件，使整个卡片可点击
+                card.addEventListener('click', () => {
+                    window.location.href = product.link;
+                });
+                
+                const imgHtml = product.image ? 
+                    `<img src="${product.image}" alt="${product.name}" onerror="this.parentElement.classList.add('image-placeholder'); this.parentElement.innerHTML='<i class=\'fas fa-image\'></i>';" loading="lazy" decoding="async">` :
+                    `<div class="image-placeholder"><i class="fas fa-image"></i></div>`;
+                
+                card.innerHTML = `
+                    <div class="product-image ${!product.image ? 'image-placeholder' : ''}">
+                        ${imgHtml}
+                        <span class="product-badge">${product.category}</span>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-desc">${product.description}</p>
+                        <a href="${product.link}" class="product-btn">
+                            View Details <i class="fas fa-arrow-right text-sm"></i>
+                        </a>
+                    </div>
+                `;
+                
+                fragment.appendChild(card);
+            });
+            
+            container.appendChild(fragment);
+            
+            // 批量添加动画类
+            setTimeout(() => {
+                const cards = container.querySelectorAll('.product-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => card.classList.add('active'), index * 50);
+                });
+            }, 100);
+            
+            renderPagination();
+        }
+
+        // 渲染分页
+        function renderPagination() {
+            const container = document.getElementById('pagination-container');
+            const filteredProducts = getFilteredProducts();
+            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            let html = '<div class="pagination">';
+            
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            }
+            
+            html += '</div>';
+            container.innerHTML = html;
+            
+            container.querySelectorAll('.pagination-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentPage = parseInt(btn.dataset.page);
+                    renderProducts(currentPage);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+        }
+
+        // 分类展开/收起功能
+        document.querySelectorAll('.category-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const subcategories = toggle.nextElementSibling;
+                const icon = toggle.querySelector('i');
+                
+                if (subcategories) {
+                    subcategories.classList.toggle('hidden');
+                    if (icon) {
+                        icon.style.transform = subcategories.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+                    }
+                }
+                
+                // 处理分类点击
+                const category = toggle.dataset.category;
+                if (category) {
+                    currentCategory = category;
+                    currentSubcategory = 'all';
+                    currentPage = 1;
+                    renderProducts(currentPage);
+                }
+            });
+        });
+        
+        // 子分类筛选
+        document.querySelectorAll('.subcategory-item').forEach(item => {
+            item.addEventListener('click', () => {
+                currentSubcategory = item.dataset.subcategory;
+                currentPage = 1;
+                renderProducts(currentPage);
+            });
+        });
+        
+        // 分类标签筛选
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentCategory = tab.dataset.category;
+                currentSubcategory = 'all';
+                currentPage = 1;
+                renderProducts(currentPage);
+            });
+        });
+
+        // 移动端菜单
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // 滚动动画
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // 从URL获取分类参数
+        function getCategoryFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('category') || 'all';
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 从URL获取分类
+            const urlCategory = getCategoryFromUrl();
+            if (urlCategory !== 'all') {
+                currentCategory = urlCategory;
+                // 激活对应分类标签
+                document.querySelectorAll('.category-tab').forEach(tab => {
+                    if (tab.dataset.category === urlCategory) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+            }
+            renderProducts(currentPage);
+            initScrollReveal();
+        });
+    </script>
+</body>
+</html>

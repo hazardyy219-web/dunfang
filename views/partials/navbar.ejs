@@ -1,0 +1,311 @@
+<!-- 导航栏 -->
+<header class="nav-container">
+    <div class="max-w-7xl mx-auto px-8 lg:px-12">
+        <div class="flex items-center justify-between h-24">
+            <div class="flex items-center gap-8">
+                <a href="/" class="flex items-center gap-4">
+                    <img src="/images/logo1.png" alt="Dunfang" class="h-12 w-auto">
+                    <span class="text-2xl font-semibold text-gray-900 tracking-wide" style="font-weight: 600; letter-spacing: 0.1em;">DUNFANG</span>
+                </a>
+                
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="/" class="nav-link <%= currentPage === 'home' ? 'active' : '' %>">Home</a>
+                    
+                    <!-- Products 三级菜单 -->
+                    <div class="nav-dropdown-wrapper">
+                        <a href="/products" class="nav-link <%= currentPage === 'products' ? 'active' : '' %>" id="products-trigger">
+                            Products
+                            <i class="fas fa-chevron-down text-xs ml-1 transition-transform duration-300"></i>
+                        </a>
+                        
+                        <!-- 三级菜单容器 -->
+                        <div class="mega-menu" id="mega-menu">
+                            <div class="mega-menu-inner">
+                                <!-- 第一列：母类目 -->
+                                <div class="menu-column category-column">
+                                    <div class="column-title">Categories</div>
+                                    <ul class="category-list">
+                                        <li class="category-item" data-category="metal">
+                                            <a href="/products?category=metal" class="category-link">
+                                                <span>Metal Products</span>
+                                                <i class="fas fa-chevron-right text-xs"></i>
+                                            </a>
+                                        </li>
+                                        <li class="category-item" data-category="plastic">
+                                            <a href="/products?category=plastic" class="category-link">
+                                                <span>Plastic Products</span>
+                                                <i class="fas fa-chevron-right text-xs"></i>
+                                            </a>
+                                        </li>
+                                        <li class="category-item" data-category="rubber">
+                                            <a href="/products?category=rubber" class="category-link">
+                                                <span>Rubber Products</span>
+                                                <i class="fas fa-chevron-right text-xs"></i>
+                                            </a>
+                                        </li>
+                                        <li class="category-item" data-category="building">
+                                            <a href="/products?category=building" class="category-link">
+                                                <span>Building Energy</span>
+                                                <i class="fas fa-chevron-right text-xs"></i>
+                                            </a>
+                                        </li>
+                                        <li class="category-item" data-category="mold">
+                                            <a href="/products?category=mold" class="category-link">
+                                                <span>Mold & Tooling</span>
+                                                <i class="fas fa-chevron-right text-xs"></i>
+                                            </a>
+                                        </li>
+                                        <li class="category-item" data-category="hardware">
+                                            <a href="/products?category=hardware" class="category-link">
+                                                <span>Hardware Accessories</span>
+                                                <i class="fas fa-chevron-right text-xs"></i>
+                                            </a>
+                                        </li>
+                                        <li class="category-item" data-category="mechanical">
+                                            <a href="/products?category=mechanical" class="category-link">
+                                                <span>Mechanical & Electrical</span>
+                                                <i class="fas fa-chevron-right text-xs"></i>
+                                            </a>
+                                        </li>
+                                        <li class="category-item" data-category="all">
+                                            <a href="/products" class="category-link view-all">
+                                                <span>All Products</span>
+                                                <i class="fas fa-arrow-right text-xs"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- 第二列：子类目 -->
+                                <div class="menu-column subcategory-column">
+                                    <div class="column-title" id="subcategory-title">Select Category</div>
+                                    <ul class="subcategory-list" id="subcategory-list">
+                                        <!-- 动态加载子类目 -->
+                                    </ul>
+                                </div>
+                                
+                                <!-- 第三列：产品展示图 -->
+                                <div class="menu-column product-showcase">
+                                    <div class="showcase-image-wrapper">
+                                        <img id="showcase-image" src="/images/metal-images/Flashing Forming Tool.jpg" alt="Product Showcase">
+                                        <div class="showcase-overlay">
+                                            <span class="showcase-category" id="showcase-category">Metal Products</span>
+                                            <span class="showcase-subcategory" id="showcase-subcategory">Metal Forming Tools</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="/about" class="nav-link <%= currentPage === 'about' ? 'active' : '' %>">About</a>
+                    <a href="/contact" class="nav-link <%= currentPage === 'contact' ? 'active' : '' %>">Contact</a>
+                </nav>
+            </div>
+            
+            <button id="menu-toggle" class="md:hidden p-2 text-gray-600">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 移动端菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+        <div class="px-8 py-6 space-y-4">
+            <a href="/" class="block py-3 text-gray-600 hover:text-gray-900 <%= currentPage === 'home' ? 'font-medium' : '' %>">Home</a>
+            <a href="/products" class="block py-3 text-gray-600 hover:text-gray-900 <%= currentPage === 'products' ? 'font-medium' : '' %>">Products</a>
+            <a href="/about" class="block py-3 text-gray-600 hover:text-gray-900 <%= currentPage === 'about' ? 'font-medium' : '' %>">About</a>
+            <a href="/contact" class="block py-3 text-gray-600 hover:text-gray-900 <%= currentPage === 'contact' ? 'font-medium' : '' %>">Contact</a>
+        </div>
+    </div>
+</header>
+
+<script>
+// 产品分类数据结构
+const menuData = {
+    metal: {
+        name: 'Metal Products',
+        subcategories: [
+            { id: 'metal-forming', name: 'Metal Forming Tools', image: '/images/metal-images/Flashing Forming Tool.jpg' },
+            { id: 'metal-stamping', name: 'Metal Stamping Dies', image: '/images/metal-images/2016-01-28 171115.jpg' }
+        ]
+    },
+    plastic: {
+        name: 'Plastic Products',
+        subcategories: [
+            { id: 'plastic-components', name: 'Plastic Components', image: '/images/plastic-images/plastic1.png' },
+            { id: 'plastic-containers', name: 'Plastic Containers', image: '/images/plastic-images/plastic2.png' }
+        ]
+    },
+    rubber: {
+        name: 'Rubber Products',
+        subcategories: [
+            { id: 'rubber-seals', name: 'Rubber Seals', image: '/images/rubber-images/rubber1.jpg' },
+            { id: 'rubber-gaskets', name: 'Rubber Gaskets', image: '/images/rubber-images/rubber2.jpg' },
+            { id: 'rubber-o-rings', name: 'Rubber O-Rings', image: '/images/rubber-images/rubber3.jpg' }
+        ]
+    },
+    building: {
+        name: 'Building Energy',
+        subcategories: [
+            { id: 'energy-windows', name: 'Energy Saving Windows', image: '/images/buildingenergysaving-images/slight.jpg' }
+        ]
+    },
+    mold: {
+        name: 'Mold & Tooling',
+        subcategories: [
+            { id: 'injection-molds', name: 'Injection Molds', image: '/images/moldtooling-images/Denso Duct Grill.jpg' },
+            { id: 'automotive-molds', name: 'Automotive Molds', image: '/images/moldtooling-images/Ford Under Engine Tray.jpg' },
+            { id: 'electronic-molds', name: 'Electronic Component Molds', image: '/images/moldtooling-images/IMG-20130122-01079.jpg' }
+        ]
+    },
+    hardware: {
+        name: 'Hardware Accessories',
+        subcategories: [
+            { id: 'fasteners', name: 'Fasteners', image: '/images/hardwareaccessories-images/hard1.png' },
+            { id: 'handles-knobs', name: 'Handles & Knobs', image: '/images/hardwareaccessories-images/hard2.png' },
+            { id: 'hinges', name: 'Hinges', image: '/images/hardwareaccessories-images/hard3.png' },
+            { id: 'springs', name: 'Springs', image: '/images/hardwareaccessories-images/hard4.png' }
+        ]
+    },
+    mechanical: {
+        name: 'Mechanical & Electrical',
+        subcategories: [
+            { id: 'electrical-panels', name: 'Electrical Control Panels', image: '/images/mechanicalelectrical-images/1.jpg' },
+            { id: 'industrial-motors', name: 'Industrial Motors', image: '/images/mechanicalelectrical-images/2.jpg' },
+            { id: 'hydraulic-components', name: 'Hydraulic Components', image: '/images/mechanicalelectrical-images/3.jpg' },
+            { id: 'automation-systems', name: 'Automation Control Systems', image: '/images/mechanicalelectrical-images/4.jpg' }
+        ]
+    },
+    all: {
+        name: 'All Products',
+        subcategories: []
+    }
+};
+
+// 初始化三级菜单
+document.addEventListener('DOMContentLoaded', function() {
+    const productsTrigger = document.getElementById('products-trigger');
+    const megaMenu = document.getElementById('mega-menu');
+    const categoryItems = document.querySelectorAll('.category-item');
+    const subcategoryList = document.getElementById('subcategory-list');
+    const subcategoryTitle = document.getElementById('subcategory-title');
+    const showcaseImage = document.getElementById('showcase-image');
+    const showcaseCategory = document.getElementById('showcase-category');
+    const showcaseSubcategory = document.getElementById('showcase-subcategory');
+    
+    let activeCategory = null;
+    let menuTimeout = null;
+    
+    // 显示菜单
+    function showMenu() {
+        clearTimeout(menuTimeout);
+        megaMenu.classList.add('active');
+        productsTrigger.querySelector('.fa-chevron-down').style.transform = 'rotate(180deg)';
+        
+        // 默认选中第一个分类
+        if (!activeCategory) {
+            const firstCategory = categoryItems[0];
+            if (firstCategory) {
+                selectCategory(firstCategory.dataset.category);
+            }
+        }
+    }
+    
+    // 隐藏菜单
+    function hideMenu() {
+        menuTimeout = setTimeout(() => {
+            megaMenu.classList.remove('active');
+            productsTrigger.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+        }, 200);
+    }
+    
+    // 选择分类
+    function selectCategory(categoryId) {
+        activeCategory = categoryId;
+        const data = menuData[categoryId];
+        
+        if (!data) return;
+        
+        // 更新母类目高亮
+        categoryItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.category === categoryId);
+        });
+        
+        // 更新子类目列表
+        subcategoryTitle.textContent = data.name;
+        subcategoryList.innerHTML = '';
+        
+        if (data.subcategories.length === 0) {
+            // All Products 情况
+            subcategoryList.innerHTML = `
+                <li class="subcategory-item">
+                    <a href="/products" class="subcategory-link view-all">
+                        <span>View All Products</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </li>
+            `;
+            showcaseImage.src = '/images/metal-images/Flashing Forming Tool.jpg';
+            showcaseCategory.textContent = 'All Products';
+            showcaseSubcategory.textContent = 'Browse our complete catalog';
+        } else {
+            data.subcategories.forEach((sub, index) => {
+                const li = document.createElement('li');
+                li.className = 'subcategory-item';
+                li.innerHTML = `
+                    <a href="/products?category=${categoryId}&subcategory=${sub.id}" class="subcategory-link" data-image="${sub.image}" data-subcategory="${sub.name}">
+                        <span>${sub.name}</span>
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </a>
+                `;
+                
+                // 添加悬停事件
+                const link = li.querySelector('.subcategory-link');
+                link.addEventListener('mouseenter', function() {
+                    showcaseImage.src = sub.image;
+                    showcaseCategory.textContent = data.name;
+                    showcaseSubcategory.textContent = sub.name;
+                    
+                    // 高亮当前子类目
+                    document.querySelectorAll('.subcategory-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+                
+                subcategoryList.appendChild(li);
+                
+                // 默认显示第一个子类目的图片
+                if (index === 0) {
+                    showcaseImage.src = sub.image;
+                    showcaseCategory.textContent = data.name;
+                    showcaseSubcategory.textContent = sub.name;
+                }
+            });
+        }
+    }
+    
+    // 事件监听
+    productsTrigger.addEventListener('mouseenter', showMenu);
+    megaMenu.addEventListener('mouseenter', () => clearTimeout(menuTimeout));
+    
+    productsTrigger.addEventListener('mouseleave', hideMenu);
+    megaMenu.addEventListener('mouseleave', hideMenu);
+    
+    // 母类目悬停事件
+    categoryItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            selectCategory(this.dataset.category);
+        });
+    });
+    
+    // 移动端菜单切换
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+});
+</script>

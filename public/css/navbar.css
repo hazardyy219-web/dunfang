@@ -1,0 +1,318 @@
+/* 导航栏样式 */
+.nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(30px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.5s ease;
+}
+
+.nav-link {
+    position: relative;
+    color: var(--gray-dark);
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    padding: 0.75rem 0;
+    transition: color 0.4s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background: var(--primary);
+    transition: width 0.4s ease, left 0.4s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-link.active {
+    color: var(--primary);
+}
+
+/* 下拉菜单容器 */
+.nav-dropdown-wrapper {
+    position: relative;
+}
+
+/* 三级菜单 - ARB风格 */
+.mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 900px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.mega-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.mega-menu::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid white;
+}
+
+.mega-menu-inner {
+    display: grid;
+    grid-template-columns: 220px 220px 1fr;
+    min-height: 400px;
+}
+
+/* 菜单列 */
+.menu-column {
+    padding: 1.5rem;
+    border-right: 1px solid var(--border);
+}
+
+.menu-column:last-child {
+    border-right: none;
+}
+
+.column-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* 母类目列表 */
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-item {
+    margin-bottom: 0.25rem;
+}
+
+.category-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    color: var(--dark);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.category-link:hover,
+.category-item.active .category-link {
+    background: var(--bg-warm);
+    color: var(--primary);
+}
+
+.category-link .fa-chevron-right {
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: all 0.3s ease;
+}
+
+.category-link:hover .fa-chevron-right,
+.category-item.active .fa-chevron-right {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.category-link.view-all {
+    background: var(--primary);
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.category-link.view-all:hover {
+    background: var(--primary-dark);
+}
+
+/* 子类目列表 */
+.subcategory-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.subcategory-item {
+    margin-bottom: 0.25rem;
+}
+
+.subcategory-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 1rem;
+    color: var(--gray-dark);
+    font-size: 0.85rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.subcategory-link:hover,
+.subcategory-link.active {
+    background: var(--bg-warm);
+    color: var(--primary);
+}
+
+.subcategory-link .fa-chevron-right {
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.subcategory-link:hover .fa-chevron-right {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+.subcategory-link.view-all {
+    background: var(--primary-light);
+    color: white;
+    font-weight: 500;
+}
+
+.subcategory-link.view-all:hover {
+    background: var(--primary);
+}
+
+/* 产品展示区 */
+.product-showcase {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.5rem;
+    background: var(--bg-cream);
+}
+
+.showcase-image-wrapper {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 4/3;
+}
+
+.showcase-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.showcase-image-wrapper:hover img {
+    transform: scale(1.05);
+}
+
+.showcase-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+}
+
+.showcase-category {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary-light);
+    margin-bottom: 0.25rem;
+}
+
+.showcase-subcategory {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* 响应式适配 */
+@media (max-width: 1024px) {
+    .mega-menu {
+        width: 100%;
+        left: 0;
+        transform: translateY(10px);
+        border-radius: 0;
+        margin-top: 0;
+    }
+    
+    .mega-menu.active {
+        transform: translateY(0);
+    }
+    
+    .mega-menu::before {
+        display: none;
+    }
+    
+    .mega-menu-inner {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+    
+    .menu-column {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .product-showcase {
+        display: none;
+    }
+}
+
+/* 移动端菜单 */
+@media (max-width: 768px) {
+    .nav-container {
+        position: relative;
+    }
+    
+    .mega-menu {
+        display: none;
+    }
+}

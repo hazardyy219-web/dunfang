@@ -1,0 +1,32 @@
+{
+  "name": "dun-precision-machinery",
+  "version": "1.0.0",
+  "description": "Ningbo Dunfang Precision Machinery Co., Ltd. Official Website",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "ejs": "^3.1.9",
+    "express": "^4.22.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^8.0.5",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "precision",
+    "machinery",
+    "manufacturing",
+    "export",
+    "B2B"
+  ],
+  "author": "Ningbo Dunfang Precision Machinery Co., Ltd.",
+  "license": "MIT"
+}
